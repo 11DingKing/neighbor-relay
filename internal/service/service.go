@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -43,11 +44,8 @@ func ID() string {
 	return hex.EncodeToString(b)
 }
 func Hash(v string) string {
-	b := make([]byte, 32)
-	for i, c := range []byte(v) {
-		b[i%32] = (b[i%32] * 31) ^ c
-	}
-	return hex.EncodeToString(b)
+	sum := sha256.Sum256([]byte(v))
+	return hex.EncodeToString(sum[:])
 }
 func Encode(v any) string { b, _ := json.Marshal(v); return string(b) }
 func (s *Service) Authenticate(ctx context.Context, token string) (domain.User, error) {
