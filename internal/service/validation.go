@@ -148,9 +148,26 @@ func JoinErrors(primary, secondary error) error {
 	}
 	return secondary
 }
-func ZeroTime(t time.Time) bool { return t.IsZero() }
-func IsFuture(t time.Time) bool { return t.After(time.Now().UTC()) }
-func IsPast(t time.Time) bool { return t.Before(time.Now().UTC()) }
+func ZeroTime(t time.Time) bool       { return t.IsZero() }
+func IsFuture(t time.Time) bool       { return t.After(time.Now().UTC()) }
+func IsPast(t time.Time) bool         { return t.Before(time.Now().UTC()) }
 func NormalizeStatus(v string) string { return strings.ToLower(strings.TrimSpace(v)) }
-func EqualFold(a,b string) bool { return strings.EqualFold(strings.TrimSpace(a),strings.TrimSpace(b)) }
-func MaxInt(a,b int) int { if a>b{return a};return b }
+func EqualFold(a, b string) bool {
+	return strings.EqualFold(strings.TrimSpace(a), strings.TrimSpace(b))
+}
+func MaxInt(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+func MinInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+func Between(v, min, max int) bool   { return v >= min && v <= max }
+func Present(v *string) bool         { return v != nil && strings.TrimSpace(*v) != "" }
+func CanonicalEmail(v string) string { return strings.ToLower(strings.TrimSpace(v)) }
+func CanonicalPhone(v string) string { return strings.ReplaceAll(strings.TrimSpace(v), " ", "") }
