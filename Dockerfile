@@ -1,9 +1,11 @@
-FROM golang:1.26-bookworm AS build
+FROM --platform=$BUILDPLATFORM golang:1.26-bookworm AS build
+ARG TARGETOS
+ARG TARGETARCH
 WORKDIR /src
 COPY go.mod ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 go build -trimpath -o /out/neighbor-relay ./cmd/server
+RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64} go build -trimpath -o /out/neighbor-relay ./cmd/server
 FROM debian:bookworm-slim
 RUN useradd --system --uid 10001 app && mkdir -p /data && chown app:app /data
 WORKDIR /app
